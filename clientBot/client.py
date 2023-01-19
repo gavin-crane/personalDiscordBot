@@ -4,14 +4,12 @@ import random
 from discord.ext import commands
 from discord.ext import commands
 from discord.utils import get
-from discord import FFmpegPCMAudio
-from youtube_dl import YoutubeDL
-import selenium.webdriver as webdriver
+
 import weatherUtil
 import chatGPTClone
 
-## openAI API AI KEY: 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
-## discord Token: MTAyOTE3MjcwNDgwNjQ0NTA1Ng.GfSa9u.BIujlIu5UpOyqDGBNUeaODKpYlWGmEbg-kt2fQ
+## openAI API AI KEY: 
+## discord Token: 
 
 ##Discord Token
 BOT_TOKEN = ""
@@ -39,6 +37,7 @@ client = commands.Bot(command_prefix = command_notation, intents = discord.Inten
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     
+# given a city return the current weather in F and C with an emoji    
 @client.command()   
 async def weather(ctx, arg):
     await ctx.send(await weatherUtil.getweather(arg));
@@ -47,7 +46,6 @@ async def weather(ctx, arg):
 @client.command()
 async def ai(ctx, args):
     
-    # append question to the file
     f_user = open("personalDiscordBot/clientBot/aiConvoLog.txt", "a")
     # get rid of the command part of the message body via splicing
     this_message_text = "Name: " + ctx.message.author.display_name + "\n" + ctx.message.content[len(command_notation)+3:] + "\n" 
@@ -67,14 +65,11 @@ async def ai(ctx, args):
     
     await ctx.send(ai_response)
 
-# stops ai session    
+# clears ai convo log file 
 @client.command()
 async def byeai(ctx):
-    
     with open("aiConvoLog.txt",'r+') as file:
         file.truncate(0)
-    
-    #print("CLIENT RESPONSE", chatGPT.aiRequest(arg))
     await ctx.send("Goodbye! Reseting my memory...")
 
 @client.command()
