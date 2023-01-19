@@ -14,11 +14,10 @@ import chatGPTClone
 ## discord Token: MTAyOTE3MjcwNDgwNjQ0NTA1Ng.GfSa9u.BIujlIu5UpOyqDGBNUeaODKpYlWGmEbg-kt2fQ
 
 ##Discord Token
-TOKEN = 'MTAyOTE3MjcwNDgwNjQ0NTA1Ng.GfSa9u.BIujlIu5UpOyqDGBNUeaODKpYlWGmEbg-kt2fQ'
+BOT_TOKEN = ""
 
 #this will be what invokes commands
 command_notation = "++"
-
 
 def get_results(search_term):
     url = "https://www.youtube.com/"
@@ -49,20 +48,20 @@ async def weather(ctx, arg):
 async def ai(ctx, args):
     
     # append question to the file
-    f_user = open("aiConvoLog.txt", "a")
+    f_user = open("personalDiscordBot/clientBot/aiConvoLog.txt", "a")
     # get rid of the command part of the message body via splicing
     this_message_text = "Name: " + ctx.message.author.display_name + "\n" + ctx.message.content[len(command_notation)+3:] + "\n" 
     f_user.write(this_message_text) # log it to the file
     f_user.close()
     
     # read the whole file and give it to the ai
-    f_for_ai = open("aiConvoLog.txt", "r")
+    f_for_ai = open("personalDiscordBot/clientBot/aiConvoLog.txt", "r")
     for_AI = f_for_ai.read()
     ai_response = chatGPTClone.openai_create(for_AI) + "\n"
     f_for_ai.close()
     
     # append the ai response to the file
-    f_ai_write = open("aiConvoLog.txt", "a")
+    f_ai_write = open("personalDiscordBot/clientBot/aiConvoLog.txt", "a")
     f_ai_write.write(ai_response+"\n")
     f_ai_write.close()
     
@@ -150,5 +149,5 @@ async def on_message(message):
 
 
 
-client.run(TOKEN)
+client.run(BOT_TOKEN)
 
