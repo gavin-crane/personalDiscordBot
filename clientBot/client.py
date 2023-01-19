@@ -1,30 +1,27 @@
+import os
 from operator import truediv
 import discord
 import random
 from discord.ext import commands
 from discord.ext import commands
 from discord.utils import get
+from dotenv import load_dotenv
 
 import weatherUtil
 import chatGPTClone
+
+load_dotenv()
 
 ## openAI API AI KEY: 
 ## discord Token: 
 
 ##Discord Token
-BOT_TOKEN = ""
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
 
 #this will be what invokes commands
 command_notation = "++"
 
-def get_results(search_term):
-    url = "https://www.youtube.com/"
-    browser = webdriver.Chrome()
-    browser.get(url)
-    search_box = browser.find_element_by_id("query")
-    search_box.send_keys(search_term)
-    search_box.submit()
-    
 
 help_command = commands.DefaultHelpCommand(
     no_category = 'Commands'
@@ -46,20 +43,20 @@ async def weather(ctx, arg):
 @client.command()
 async def ai(ctx, args):
     
-    f_user = open("personalDiscordBot/clientBot/aiConvoLog.txt", "a")
+    f_user = open("aiConvoLog.txt", "a")
     # get rid of the command part of the message body via splicing
     this_message_text = "Name: " + ctx.message.author.display_name + "\n" + ctx.message.content[len(command_notation)+3:] + "\n" 
     f_user.write(this_message_text) # log it to the file
     f_user.close()
     
     # read the whole file and give it to the ai
-    f_for_ai = open("personalDiscordBot/clientBot/aiConvoLog.txt", "r")
+    f_for_ai = open("aiConvoLog.txt", "r")
     for_AI = f_for_ai.read()
     ai_response = chatGPTClone.openai_create(for_AI) + "\n"
     f_for_ai.close()
     
     # append the ai response to the file
-    f_ai_write = open("personalDiscordBot/clientBot/aiConvoLog.txt", "a")
+    f_ai_write = open("aiConvoLog.txt", "a")
     f_ai_write.write(ai_response+"\n")
     f_ai_write.close()
     

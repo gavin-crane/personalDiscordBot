@@ -1,8 +1,12 @@
 import os
 import openai
-import gradio as gr
+from dotenv import load_dotenv
 
-openai.api_key = ""
+load_dotenv()
+
+
+
+openai.api_key = os.getenv("API_KEY")
 
 start_sequence = "\nAI:"
 restart_sequence = "\nHuman: "
