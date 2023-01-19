@@ -6,28 +6,22 @@ from discord.ext import commands
 from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
-
 import weatherUtil
 import chatGPTClone
 
 load_dotenv()
 
-## openAI API AI KEY: 
-## discord Token: 
-
-##Discord Token
+## Discordbot token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-
-#this will be what invokes commands
-command_notation = "++"
-
+## this will be what invokes commands, change it to whatever you wish
+COMMAND_NOTATION = "++"
 
 help_command = commands.DefaultHelpCommand(
     no_category = 'Commands'
 )
 
-client = commands.Bot(command_prefix = command_notation, intents = discord.Intents.all())
+client = commands.Bot(command_prefix = COMMAND_NOTATION, intents = discord.Intents.all())
 
 ## entry point
 @client.event
@@ -45,7 +39,7 @@ async def ai(ctx, args):
     
     f_user = open("aiConvoLog.txt", "a")
     # get rid of the command part of the message body via splicing
-    this_message_text = "Name: " + ctx.message.author.display_name + "\n" + ctx.message.content[len(command_notation)+3:] + "\n" 
+    this_message_text = "Name: " + ctx.message.author.display_name + "\n" + ctx.message.content[len(COMMAND_NOTATION)+3:] + "\n" 
     f_user.write(this_message_text) # log it to the file
     f_user.close()
     
@@ -72,7 +66,7 @@ async def byeai(ctx):
 @client.command()
 async def ping(ctx):
     latency = client.latency
-    await ctx.send(latency)
+    await ctx.send("My latency is: "+latency)
     
 @client.event
 async def on_message(message):     
@@ -110,35 +104,6 @@ async def on_message(message):
     #     #await message.channel.send(embed=embed)
         
     await client.process_commands(message)
-
-## on message
-##@client.event
-##async def on_message(message):
-    
-    ##client.process_commands(message)
-    ##username = str(message.author).split('#')[0]
-    ##user_message = str(message.content)
-    ##channel = str(message.channel.name)
-    
-    
-    
-    ##if message.content == 'test':
-        ##await message.channel.send('Testing 1 2 3')
-    
-    ## take message and check if it contains bot command
-
-    ##if (check_command(user_message)):
-        ##print("WE HAVE A COMMAND")
-        ##which_command(user_message)     
-    
-    ##print(f'{username}: {user_message}: {channel}:')
-
-
-#client = discord.Client()
-
-
-
-
 
 
 client.run(BOT_TOKEN)
