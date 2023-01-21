@@ -1,8 +1,8 @@
-openai
-dotenv
-discord.py
-random
-discord.ext
-asyncio
-epicstore_api
-datetime
+openai==0.26.1
+python-dotenv==0.21.0
+discord.py==2.1.0
+epicstore-api==0.1.4
+python-weather==0.4.3
+numpy==1.23.5
+async-timeout==4.0.2
+
