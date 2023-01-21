@@ -8,6 +8,9 @@ chatGPT functionality:
 - The purpose of this log is so that the ai can read it and remember what was said earlier in the conversation.
 - Using the command prefix followed by 'byeai' will clear the contents of the log.
 
-weather functionality:
+EPIC promotion alerts
+- Bot will create a text channel and will periodically update the channel with free games to claim.
+
+Weather functionality:
 - Use the command prefix followed by 'weather' and then the name of a city or place that you want the current weather for
 
