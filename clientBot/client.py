@@ -3,7 +3,6 @@ from operator import truediv
 import discord
 import random
 from discord.ext import commands
-from discord.ext import commands
 import discord.utils
 from dotenv import load_dotenv
 import weatherUtil
@@ -33,7 +32,7 @@ async def on_ready():
         channel = discord.utils.get(guild.text_channels, name="epic-games")
         if channel is None:
             await guild.create_text_channel(name="epic-games")
-    await get_epic_games_data()
+    #await get_epic_games_data()
     
 # given a city return the current weather in F and C with an emoji    
 @client.command()   

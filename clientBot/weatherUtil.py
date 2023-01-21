@@ -9,16 +9,7 @@ async def getweather(weather):
 
     # fetch a weather forecast from a city
     weather = await client.get(weather)
-    # get the weather forecast for a few days
     
-    
-    #print(f'{weather.current.type!r}')
-    
-    for forecast in weather.forecasts:
-      # hourly forecasts
-      for hourly in forecast.hourly:
-        print(f' --> {hourly!r}')
-        
     # returns the current day's forecast temperature (int)
     return  f'{weather.current.type!r}' + "\n" + str(weather.current.temperature) + " °F\n" + str((((weather.current.temperature)-32)*5)//9) + " °C "
 

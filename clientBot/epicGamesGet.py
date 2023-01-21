@@ -2,7 +2,6 @@ from epicstore_api import EpicGamesStoreAPI, OfferData
 import json
 
 # for image viewing
-from urllib.request import urlopen
 from datetime import datetime
 
 def get_all_free_games():
