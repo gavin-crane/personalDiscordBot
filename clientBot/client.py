@@ -21,7 +21,9 @@ help_command = commands.DefaultHelpCommand(
     no_category = 'Commands'
 )
 
-client = commands.Bot(command_prefix = COMMAND_NOTATION, intents = discord.Intents.all())
+client = commands.Bot(
+    command_prefix = COMMAND_NOTATION, 
+    intents = discord.Intents.all())
 
 ## entry point
 @client.event
@@ -35,9 +37,10 @@ async def on_ready():
     #await get_epic_games_data()
     
 # given a city return the current weather in F and C with an emoji    
-@client.command()   
-async def weather(ctx, arg):
-    await ctx.send(await weatherUtil.getweather(arg));
+@client.command(name='weather', help='Returns the current weather of a given location')   
+async def weather(ctx, args):
+    argument = ctx.message.content[len(COMMAND_NOTATION)+8:]
+    await ctx.send(await weatherUtil.getweather(argument));
 
 def create_embed(game):
     embed = discord.Embed(title= game['title'], url=game['game_url'])
@@ -88,7 +91,7 @@ async def get_epic_games_data():
         await asyncio.sleep(20)
            
 # starts ai session
-@client.command()
+@client.command(name='ai', help='The ai will respond to the given question. (chatGPT)')
 async def ai(ctx, args):
     
     f_user = open("aiConvoLog.txt", "a")
@@ -111,18 +114,18 @@ async def ai(ctx, args):
     await ctx.send(ai_response)
 
 # clears ai convo log file 
-@client.command()
+@client.command(name='byeai', help='No arguments. Clears the AI memory of the conversation')
 async def byeai(ctx):
     with open("aiConvoLog.txt",'r+') as file:
         file.truncate(0)
     await ctx.send("Goodbye! Reseting my memory...")
 
-@client.command()
+@client.command(name='ping', help='No arguments. Shows bot latency')
 async def ping(ctx):
     latency = client.latency
     await ctx.send("My latency is: "+latency)
     
-@client.command()
+@client.command(name='epic', help='No arguments. Returns the current free games being offered at EPIC')
 async def epic(ctx):
     resp = epicGamesGet.get_all_free_games()
     for game in resp:

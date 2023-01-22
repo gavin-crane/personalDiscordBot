@@ -5,6 +5,7 @@ import os
 
 async def getweather(weather):
   # declare the client. format defaults to the metric system (celcius, km/h, etc.)
+  print("weather arg:", weather)
   async with python_weather.Client(format=python_weather.IMPERIAL) as client:
 
     # fetch a weather forecast from a city
@@ -19,4 +20,3 @@ if __name__ == "__main__":
   if os.name == "nt":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-  asyncio.run(getweather("seattle"))
