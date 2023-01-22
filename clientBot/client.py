@@ -16,8 +16,6 @@ load_dotenv()
 ## Discordbot token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-print("BOT TOKEN:",BOT_TOKEN)
-
 ## this will be what invokes bot commands, change it to whatever you wish
 COMMAND_NOTATION = "++"
 
@@ -33,6 +31,13 @@ client = commands.Bot(
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await client.load_extension(f'cogs.{filename[:-3]}')
+            print(f"Loaded Cog: {filename[:-3]}")
+    else:
+        print("Unable to load pycache folder.") # file for music commands
     # create epic games text channel to put free games into
     for guild in client.guilds:
         channel = discord.utils.get(guild.text_channels, name="epic-games")
@@ -141,58 +146,6 @@ async def epic(ctx):
         embed.description = game['description']
         embed.title = game['title']
         await ctx.send(embed=embed)
-        
-@client.command(name='join', help='Tells the bot to join the voice channel')
-async def join(ctx):
-    if not ctx.message.author.voice:
-        await ctx.send("{} is not connected to a voice channel".format(ctx.message.author.name))
-        return
-    else:
-        channel = ctx.message.author.voice.channel
-    await channel.connect()
-    
-@client.command(name='leave', help='To make the bot leave the voice channel')
-async def leave(ctx):
-    voice_client = ctx.message.guild.voice_client
-    if voice_client.is_connected():
-        await voice_client.disconnect()
-    else:
-        await ctx.send("The bot is not connected to a voice channel.")
-
-@client.command(name='play_song', help='To play song')
-async def play(ctx,url):
-    try :
-        server = ctx.message.guild
-        voice_channel = server.voice_client
-        async with ctx.typing():
-            filename = await getYoutubeAudio.YTDLSource.from_url(url, loop=client.loop)
-            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
-        await ctx.send('**Now playing:** {}'.format(filename))
-    except:
-        await ctx.send("The bot is not connected to a voice channel.")
-        
-@client.command(name='pause', help='This command pauses the song')
-async def pause(ctx):
-    voice_client = ctx.message.guild.voice_client
-    if voice_client.is_playing():
-        await voice_client.pause()
-    else:
-        await ctx.send("The bot is not playing anything at the moment.")
-    
-@client.command(name='resume', help='Resumes the song')
-async def resume(ctx):
-    voice_client = ctx.message.guild.voice_client
-    if voice_client.is_paused():
-        await voice_client.resume()
-    else:
-        await ctx.send("The bot was not playing anything before this. Use play_song command")
-@client.command(name='stop', help='Stops the song')
-async def stop(ctx):
-    voice_client = ctx.message.guild.voice_client
-    if voice_client.is_playing():
-        await voice_client.stop()
-    else:
-        await ctx.send("The bot is not playing anything at the moment.")
     
 @client.event
 async def on_message(message):     
