@@ -8,11 +8,15 @@ from dotenv import load_dotenv
 import weatherUtil
 import chatGPTClone
 import epicGamesGet
+import getYoutubeAudio
 import asyncio
+import youtube_dl
 load_dotenv()
 
 ## Discordbot token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+print("BOT TOKEN:",BOT_TOKEN)
 
 ## this will be what invokes bot commands, change it to whatever you wish
 COMMAND_NOTATION = "++"
@@ -67,28 +71,28 @@ async def get_epic_games_data():
         await channel.send(embed=embed)
     
     print(games_and_status)
-        
+    
+    # continously check for new free games or if the current game status has changed, then send alert.    
     while True:
         recurring_resp = epicGamesGet.get_all_free_games()
-        print("checking for game updates...")
-               
+        print("Checking for game updates...")
         # check if this game is in the dict, if it is, check if its status has changed, if so, send game alert to discord server channel
         # and update change in dictionary
-        # if the game is not in the list, then add it to the dict and send it to discord server channel
+        # if the game is not in the dict, then add it to the dict and send alert to discord server channel
         for curr_game in recurring_resp:
             if curr_game["id"] in games_and_status:
                 if curr_game["status"] != games_and_status[curr_game["id"]]:
                     games_and_status[curr_game["id"]] = curr_game["status"]
                     embed = create_embed(curr_game)
-                    print("updated the status of a game")
+                    print("Ipdated the status of a game")
                     await channel.send(embed=embed)
                     
             elif curr_game["id"] not in games_and_status:
                 games_and_status[curr_game["id"]] = game['status']
                 embed = create_embed(curr_game)
-                print("added a game")
+                print("Added a game")
                 await channel.send(embed=embed)
-        await asyncio.sleep(20)
+        await asyncio.sleep(3600) # check for updates every hour
            
 # starts ai session
 @client.command(name='ai', help='The ai will respond to the given question. (chatGPT)')
@@ -137,6 +141,58 @@ async def epic(ctx):
         embed.description = game['description']
         embed.title = game['title']
         await ctx.send(embed=embed)
+        
+@client.command(name='join', help='Tells the bot to join the voice channel')
+async def join(ctx):
+    if not ctx.message.author.voice:
+        await ctx.send("{} is not connected to a voice channel".format(ctx.message.author.name))
+        return
+    else:
+        channel = ctx.message.author.voice.channel
+    await channel.connect()
+    
+@client.command(name='leave', help='To make the bot leave the voice channel')
+async def leave(ctx):
+    voice_client = ctx.message.guild.voice_client
+    if voice_client.is_connected():
+        await voice_client.disconnect()
+    else:
+        await ctx.send("The bot is not connected to a voice channel.")
+
+@client.command(name='play_song', help='To play song')
+async def play(ctx,url):
+    try :
+        server = ctx.message.guild
+        voice_channel = server.voice_client
+        async with ctx.typing():
+            filename = await getYoutubeAudio.YTDLSource.from_url(url, loop=client.loop)
+            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename))
+        await ctx.send('**Now playing:** {}'.format(filename))
+    except:
+        await ctx.send("The bot is not connected to a voice channel.")
+        
+@client.command(name='pause', help='This command pauses the song')
+async def pause(ctx):
+    voice_client = ctx.message.guild.voice_client
+    if voice_client.is_playing():
+        await voice_client.pause()
+    else:
+        await ctx.send("The bot is not playing anything at the moment.")
+    
+@client.command(name='resume', help='Resumes the song')
+async def resume(ctx):
+    voice_client = ctx.message.guild.voice_client
+    if voice_client.is_paused():
+        await voice_client.resume()
+    else:
+        await ctx.send("The bot was not playing anything before this. Use play_song command")
+@client.command(name='stop', help='Stops the song')
+async def stop(ctx):
+    voice_client = ctx.message.guild.voice_client
+    if voice_client.is_playing():
+        await voice_client.stop()
+    else:
+        await ctx.send("The bot is not playing anything at the moment.")
     
 @client.event
 async def on_message(message):     
@@ -149,31 +205,9 @@ async def on_message(message):
                     if member_in_channel == member:
                         #await member_in_channel.edit(mute=True)
                         await member_in_channel.move_to(guild.get_channel(771500916922646538))
-    # if kellan says anything
-    # if message.author.id == 115503484136194054:
-        
-    #     image_urls = [ "https://cdn.discordapp.com/attachments/246874516096155648/1064440963877052476/image.png",
-    #                   ]  
-        
-    #     quip = ["", 
-    #             ]
-    #     #print("this is the author", message.author.name)
-    #     server_emojis = message.guild.emojis
-    #     #print("random emoji chosen: ",random.choice(server_emojis))
-        
-    #     await message.add_reaction(":metalKellan:1024958986161762334")
-    #     # for _ in range(20):
-    #     #     await message.add_reaction(random.choice(server_emojis))
-
-    #    # print("ALL SERVER STICKERS", server_sticker
-    #     # "https://discord.com/channels/246874516096155648/246874516096155648/1064437337695719495"
-        
-    #     embed = discord.Embed(title='Soup Time', description='I need more soup')
-    #     image_url = "https://cdn.discordapp.com/attachments/246874516096155648/1064440963877052476/image.png"  
-    #     embed.set_image(url = image_url)
-    #     #await message.channel.send(embed=embed)
-        
     await client.process_commands(message)
+
+
 
 
 client.run(BOT_TOKEN)
