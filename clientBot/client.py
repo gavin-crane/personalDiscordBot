@@ -12,6 +12,7 @@ import asyncio
 import youtube_dl
 load_dotenv()
 
+
 ## Discordbot token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
@@ -30,13 +31,15 @@ client = commands.Bot(
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    
+   
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             await client.load_extension(f'cogs.{filename[:-3]}')
             print(f"Loaded Cog: {filename[:-3]}")
+    
     else:
         print("Unable to load pycache folder.") # file for music commands
+        
     # create epic games text channel to put free games into
     for guild in client.guilds:
         channel = discord.utils.get(guild.text_channels, name="epic-games")

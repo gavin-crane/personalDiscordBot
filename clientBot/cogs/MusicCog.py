@@ -14,6 +14,7 @@ from discord.ext import commands
 from lavalink.filters import LowPass
 
 url_rx = re.compile(r'https?://(?:www\.)?.+')
+# load lavalinks server
 
 
 class LavalinkVoiceClient(discord.VoiceClient):
@@ -24,6 +25,8 @@ class LavalinkVoiceClient(discord.VoiceClient):
     see the following documentation:
     https://discordpy.readthedocs.io/en/latest/api.html#voiceprotocol
     """
+    
+    
 
     def __init__(self, client: discord.Client, channel: discord.abc.Connectable):
         self.client = client
@@ -41,6 +44,7 @@ class LavalinkVoiceClient(discord.VoiceClient):
                 'default-node'
             )
             self.lavalink = self.client.lavalink
+           
 
     async def on_voice_server_update(self, data):
         # the data needs to be transformed before being handed down to
@@ -95,7 +99,7 @@ class MusicCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
+        
         if not hasattr(bot, 'lavalink'):  # This ensures the client isn't overwritten during cog reloads.
             bot.lavalink = lavalink.Client(bot.user.id)
             bot.lavalink.add_node('localhost', 7000, 'testing', 'na', 'default-node')  # Host, Port, Password, Region, Name
