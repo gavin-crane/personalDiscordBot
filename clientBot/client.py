@@ -12,7 +12,6 @@ import asyncio
 import youtube_dl
 load_dotenv()
 
-
 ## Discordbot token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 

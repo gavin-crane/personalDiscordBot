@@ -35,14 +35,15 @@ class LavalinkVoiceClient(discord.VoiceClient):
         if hasattr(self.client, 'lavalink'):
             self.lavalink = self.client.lavalink
         else:
+            #host = 
             self.client.lavalink = lavalink.Client(client.user.id)
+            #lavalink.add_node("node1.kartharta.xyz", 443, "kdlavalink", True)
             self.client.lavalink.add_node(
                 'localhost',
                 7000,
                 'testing',
-                'us',
-                'default-node'
-            )
+                True)
+            
             self.lavalink = self.client.lavalink
            
 
@@ -102,7 +103,8 @@ class MusicCog(commands.Cog):
         
         if not hasattr(bot, 'lavalink'):  # This ensures the client isn't overwritten during cog reloads.
             bot.lavalink = lavalink.Client(bot.user.id)
-            bot.lavalink.add_node('localhost', 7000, 'testing', 'na', 'default-node')  # Host, Port, Password, Region, Name
+            bot.lavalink.add_node('localhost', 
+                                  7000, 'testing', True)  # Host, Port, Password, Region, Name
 
         lavalink.add_event_hook(self.track_hook)
 
