@@ -9,7 +9,6 @@ import weatherUtil
 import chatGPTClone
 import epicGamesGet
 import asyncio
-import youtube_dl
 load_dotenv()
 
 ## Discordbot token
@@ -44,7 +43,7 @@ async def on_ready():
         channel = discord.utils.get(guild.text_channels, name="epic-games")
         if channel is None:
             await guild.create_text_channel(name="epic-games")
-    #await get_epic_games_data()
+    await get_epic_games_data()
     
 # given a city return the current weather in F and C with an emoji    
 @client.command(name='weather', help='Returns the current weather of a given location')   
@@ -90,7 +89,7 @@ async def get_epic_games_data():
                 if curr_game["status"] != games_and_status[curr_game["id"]]:
                     games_and_status[curr_game["id"]] = curr_game["status"]
                     embed = create_embed(curr_game)
-                    print("Ipdated the status of a game")
+                    print("Updated the status of a game")
                     await channel.send(embed=embed)
                     
             elif curr_game["id"] not in games_and_status:
@@ -147,7 +146,7 @@ async def epic(ctx):
         embed.description = game['description']
         embed.title = game['title']
         await ctx.send(embed=embed)
-    
+
 @client.event
 async def on_message(message):     
     print(message.content)
