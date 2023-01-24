@@ -1,5 +1,6 @@
 import wavelink
 from discord.ext import commands
+import re
 
 class MusicCog(commands.Cog):
     """Music cog to hold Wavelink related commands and listeners."""
@@ -52,13 +53,23 @@ class MusicCog(commands.Cog):
         else:
             vc: wavelink.Player = ctx.voice_client
         
+        # Check if the input is a valid YouTube URL
+        youtube_url = re.search("(?P<url>https?://)?(www\.)?(youtube\.com|youtu\.?be)/(watch\?v=)?(?P<id>[A-Za-z0-9\-=_]+)", search)
+        
+        if youtube_url:
+            # Create a track object using the YouTube URL
+            track = wavelink.YouTubeTrack(youtube_url.group("id"))
+        else:
+            track = wavelink.YouTubeTrack(search)
+        
         if vc.is_playing():
-            await vc.queue.put_wait(search)
+            await vc.queue.put_wait(track)
             await ctx.send(f"Adding to queue: {search.title}")
              
         else:
-            await ctx.send(f"Playing: {search.title}`")
-            await vc.play(search)
+            await ctx.send(f"Playing: {search.title}")
+           
+            await vc.play(track)
         vc.ctx = ctx
         setattr(vc, "loop", False)
         

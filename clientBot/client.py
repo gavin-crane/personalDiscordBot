@@ -37,7 +37,7 @@ async def on_ready():
         channel = discord.utils.get(guild.text_channels, name="epic-games")
         if channel is None:
             await guild.create_text_channel(name="epic-games")
-    await get_epic_games_data()
+    #await get_epic_games_data()
     
 # given a city return the current weather in F and C with an emoji    
 @client.command(name='weather', help='Returns the current weather of a given location')   
