@@ -17,10 +17,10 @@ def get_all_free_games():
         if item.get("promotions") != None: # gets rid of non-promotion games, for some reason BL3 dlcs was in here?
             actual_free_games.insert(0, item) # pop REAL free games to actual_free_games array
         
-    # json_string = json.dumps(actual_free_games, indent=4)
+    json_string = json.dumps(free_games, indent=4)
 
-    # with open('data.json', 'w') as json_file:
-    #     json_file.write(json_string)
+    with open('free_games_request.json', 'w') as json_file:
+        json_file.write(json_string)
         
     # print("==============================")    
     for game in actual_free_games:
