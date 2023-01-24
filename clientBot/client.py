@@ -30,20 +30,14 @@ client = commands.Bot(
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
    
-    for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
-            await client.load_extension(f'cogs.{filename[:-3]}')
-            print(f"Loaded Cog: {filename[:-3]}")
-    
-    else:
-        print("Unable to load pycache folder.") # file for music commands
+    await client.load_extension("cogs.MusicCog") # file for music commands
         
     # create epic games text channel to put free games into
     for guild in client.guilds:
         channel = discord.utils.get(guild.text_channels, name="epic-games")
         if channel is None:
             await guild.create_text_channel(name="epic-games")
-    await get_epic_games_data()
+    #await get_epic_games_data()
     
 # given a city return the current weather in F and C with an emoji    
 @client.command(name='weather', help='Returns the current weather of a given location')   
