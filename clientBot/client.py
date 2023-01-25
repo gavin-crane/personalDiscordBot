@@ -1,7 +1,6 @@
 import os
 from operator import truediv
 import discord
-import random
 from discord.ext import commands
 import discord.utils
 from dotenv import load_dotenv
