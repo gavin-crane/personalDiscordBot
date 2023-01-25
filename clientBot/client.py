@@ -15,7 +15,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 ## this will be what invokes bot commands, change it to whatever you wish
-COMMAND_NOTATION = "++"
+COMMAND_NOTATION = os.getenv("COMMAND_PREFIX")
 
 help_command = commands.DefaultHelpCommand(
     no_category = 'Commands'
@@ -37,7 +37,7 @@ async def on_ready():
         channel = discord.utils.get(guild.text_channels, name="epic-games")
         if channel is None:
             await guild.create_text_channel(name="epic-games")
-    #await get_epic_games_data()
+    await get_epic_games_data() #<- handles hourly checks for epic games promotions
     
 # given a city return the current weather in F and C with an emoji    
 @client.command(name='weather', help='Returns the current weather of a given location')   
@@ -81,15 +81,15 @@ async def get_epic_games_data():
         for curr_game in recurring_resp:
             if curr_game["id"] in games_and_status:
                 if curr_game["status"] != games_and_status[curr_game["id"]]:
+                    print("Updated the status of a game, game:", curr_game["id"], "New status:", curr_game["status"], "Old status:", games_and_status[curr_game["id"]])
                     games_and_status[curr_game["id"]] = curr_game["status"]
                     embed = create_embed(curr_game)
-                    print("Updated the status of a game")
                     await channel.send(embed=embed)
                     
             elif curr_game["id"] not in games_and_status:
                 games_and_status[curr_game["id"]] = game['status']
                 embed = create_embed(curr_game)
-                print("Added a game")
+                print("Added a game:", curr_game["id"], "status:", game["status"])
                 await channel.send(embed=embed)
         await asyncio.sleep(3600) # check for updates every hour
            
