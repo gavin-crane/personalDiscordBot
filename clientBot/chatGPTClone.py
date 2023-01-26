@@ -21,7 +21,7 @@ def openai_create(prompt):
     model="text-davinci-003",
     prompt=prompt,
     temperature=0.9, # randomness to responses, 0 = no randomness
-    max_tokens= 1024, # max amount of characters
+    max_tokens= 2024, # max amount of characters
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0.6,
