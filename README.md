@@ -14,3 +14,5 @@ EPIC promotion alerts
 Weather functionality:
 - Use the command prefix followed by 'weather' and then the name of a city or place that you want the current weather for
 
+Music:
+- Can play, pause, resume, and music to a queue!
