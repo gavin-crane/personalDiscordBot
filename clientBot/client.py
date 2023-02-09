@@ -55,9 +55,10 @@ def create_embed(game):
     return embed
 
 async def get_epic_games_data():
-    channel = None
+    channels = []
     for guild in client.guilds:
         channel = discord.utils.get(guild.text_channels, name="epic-games")
+        channels.append(channel)
         
     resp = epicGamesGet.get_all_free_games()
     games_and_status = {}
@@ -83,13 +84,15 @@ async def get_epic_games_data():
                     print("Updated the status of a game, game:", curr_game["id"], "New status:", curr_game["status"], "Old status:", games_and_status[curr_game["id"]])
                     games_and_status[curr_game["id"]] = curr_game["status"]
                     embed = create_embed(curr_game)
-                    await channel.send(embed=embed)
+                    for channel in channels:
+                        await channel.send(embed=embed)
                     
             elif curr_game["id"] not in games_and_status:
                 games_and_status[curr_game["id"]] = game['status']
                 embed = create_embed(curr_game)
                 print("Added a game:", curr_game["id"], "status:", game["status"])
-                await channel.send(embed=embed)
+                for channel in channels:
+                        await channel.send(embed=embed)
         await asyncio.sleep(3600) # check for updates every hour
            
 # starts ai session
