@@ -29,7 +29,7 @@ client = commands.Bot(
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
    
-    await client.load_extension("cogs.MusicCog") # file for music commands
+    await client.load_extension("cogs.MusicCog") # command file for music commands
         
     # create epic games text channel to put free games into
     for guild in client.guilds:
@@ -67,7 +67,8 @@ async def get_epic_games_data():
     for game in resp:
         games_and_status[game['id']] = game['status']
         embed = create_embed(game)
-        await channel.send(embed=embed)
+        for channel in channels:
+            await channel.send(embed=embed)
     
     print(games_and_status)
     
@@ -147,7 +148,6 @@ async def epic(ctx):
 async def on_message(message):     
     print(message.author, message.content)
     await client.process_commands(message)
-    
     
 client.run(BOT_TOKEN)
 
