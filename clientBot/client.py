@@ -145,19 +145,9 @@ async def epic(ctx):
 
 @client.event
 async def on_message(message):     
-    print(message.content)
-    if message.content.lower() == "overwatch":
-        member = message.author
-        for guild in client.guilds:
-            for voice_channel in guild.voice_channels:
-                for member_in_channel in voice_channel.members:
-                    if member_in_channel == member:
-                        #await member_in_channel.edit(mute=True)
-                        await member_in_channel.move_to(guild.get_channel(771500916922646538))
+    print(message.author, message.content)
     await client.process_commands(message)
-
-
-
-
+    
+    
 client.run(BOT_TOKEN)
 
