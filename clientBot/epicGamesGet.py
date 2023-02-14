@@ -22,7 +22,6 @@ def get_all_free_games():
     with open('free_games_request.json', 'w') as json_file:
         json_file.write(json_string)
         
-    # print("==============================")    
     for game in actual_free_games:
         
         info_object = {} # Store this games information here
@@ -74,7 +73,8 @@ def get_all_free_games():
 
         # with open('gameObjects.json', 'w') as json_file:
         #     json_file.write(game_objects_string)
-            
+    
+    # sort game objects by dates        
     game_info_objects.sort(key=lambda obj: datetime.strptime(obj['start_date'], '%Y-%m-%d'), reverse=True)
     return game_info_objects
             

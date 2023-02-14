@@ -21,12 +21,13 @@ class MusicCog(commands.Cog):
         #                                     host='lava.link',
         #                                     port=80,
         #                                     password='dismusic')
+        
         await wavelink.NodePool.create_node(bot=self.bot,
-                                            host='purr.aikomechawaii.live',
-                                            port=10415 ,
-                                            password='AnythingAsPassword',
-                                            https=False,
-                                            region = 'us_west')
+                                            host='lavalink-replit.gavin-crane.repl.co',
+                                            port=443,
+                                            password='kellanblake',
+                                            https=True,
+                                            region='us_west')
         
     @commands.Cog.listener()
     async def on_wavelink_node_ready(self, node: wavelink.Node):
