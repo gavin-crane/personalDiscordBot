@@ -65,7 +65,7 @@ async def get_epic_games_data():
     
     # add all games and map status in the dictionary, status is either 'Free' or 'Upcomming'
     for game in resp:
-        games_and_status[game['id']] = game['status']
+        games_and_status[game['title']] = game['status']
         embed = create_embed(game)
         for channel in channels:
             await channel.send(embed=embed)
@@ -80,18 +80,18 @@ async def get_epic_games_data():
         # and update change in dictionary
         # if the game is not in the dict, then add it to the dict and send alert to discord server channel
         for curr_game in recurring_resp:
-            if curr_game["id"] in games_and_status:
-                if curr_game["status"] != games_and_status[curr_game["id"]]:
-                    print("Updated the status of a game, game:", curr_game["id"], "New status:", curr_game["status"], "Old status:", games_and_status[curr_game["id"]])
-                    games_and_status[curr_game["id"]] = curr_game["status"]
+            if curr_game["title"] in games_and_status:
+                if curr_game["status"] != games_and_status[curr_game["title"]]:
+                    print("Updated the status of a game, game:", curr_game["title"], "New status:", curr_game["status"], "Old status:", games_and_status[curr_game["id"]])
+                    games_and_status[curr_game["title"]] = curr_game["status"]
                     embed = create_embed(curr_game)
                     for channel in channels:
                         await channel.send(embed=embed)
                     
             elif curr_game["id"] not in games_and_status:
-                games_and_status[curr_game["id"]] = game['status']
+                games_and_status[curr_game["title"]] = game['status']
                 embed = create_embed(curr_game)
-                print("Added a game:", curr_game["id"], "status:", game["status"])
+                print("Added a game:", curr_game["title"], "status:", game["status"])
                 for channel in channels:
                         await channel.send(embed=embed)
         await asyncio.sleep(3600) # check for updates every hour
