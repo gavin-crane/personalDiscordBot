@@ -144,6 +144,15 @@ async def epic(ctx):
         embed.title = game['title']
         await ctx.send(embed=embed)
 
+
+
+@client.command(name='DM', help='The bot will send a DM to the given user')
+async def DM(ctx, user: discord.User, *, message=None):
+    message = message or "This Message is sent via DM"
+    await user.send(message)
+
+
+
 @client.event
 async def on_message(message):     
     print(message.author, message.content)
